@@ -5,13 +5,15 @@ from mathutils import Vector
 scale=8
 lat=[1,0,-1]
 offset=scale*0.975
+strength = 1
+mid_level = 0.5
 
 for i in range(1,4):
 	for n in range(1,4):
 		file_name = 'mdt_%s_%s.tif' % (i,n)
 		bpy.context.scene.cursor_location = Vector((offset*(-lat[n-1]),offset*lat[i-1],0))
 		bpy.ops.import_image.to_plane(files=[{'name':file_name}], directory='/media/forex/disco/ustes/BRUTOS/8k')
-		bpy.ops.transform.resize(value=(8,8,8))
+		bpy.ops.transform.resize(value=(scale,scale,scale))
 		bpy.ops.object.mode_set(mode = 'EDIT')
 		bpy.ops.mesh.subdivide(number_cuts=99)
 		bpy.ops.mesh.subdivide(number_cuts=3)
@@ -19,6 +21,8 @@ for i in range(1,4):
 		bpy.ops.object.modifier_add(type='DISPLACE')
 		bpy.data.objects['mdt_%s_%s' % (i,n)].modifiers['Displace'].texture = bpy.data.textures['mdt_%s_%s' % (i,n)]
 		bpy.data.objects['mdt_%s_%s' % (i,n)].modifiers['Displace'].texture_coords = 'UV'
+		bpy.data.objects['mdt_%s_%s' % (i,n)].modifiers['Displace'].strength = strength
+		bpy.data.objects['mdt_%s_%s' % (i,n)].modifiers['Displace'].mid_level = mid_level
 		bpy.ops.object.shade_smooth()
 		bpy.ops.object.mode_set(mode = 'EDIT')
 		obj = bpy.context.object
